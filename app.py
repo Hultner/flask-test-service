@@ -10,7 +10,7 @@ def trailer():
     return 'A trailing route redirects non trailing uris'
 
 
-@app.route('absolute')
+@app.route('/absolute')
 def absoluter():
     return 'An absolute route will return 404 if trailing slash is added to uri'
 
