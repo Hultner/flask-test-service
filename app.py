@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, abort
+from flask import Flask, url_for, request, abort, make_response
 app = Flask(__name__)
 
 @app.route('/')
@@ -9,8 +9,8 @@ def index():
 def login():
     error = None
     if request.method == 'POST':
-        if not request.json or not 'username' in request.json:
-            return 400
+        if not request.json or not all( param in request.json for param in ('password', 'username')):
+            abort(400)
 
         if valid_login( request.json['username'],
                         request.json['password']):
@@ -28,7 +28,9 @@ def valid_login(username, password):
 
 def log_the_user_in(username):
     # Placeholder login method
-    return username
+    resp = make_response('Successfully logged in as %s' % username)
+    resp.set_cookie('username', username)
+    return resp
 
 
 @app.route('/user/<username>')
