@@ -5,9 +5,11 @@ app = Flask(__name__)
 def index():
     return 'Index Page'
 
+@app.route('/login')
+def login(): pass
 
 @app.route('/user/<username>')
-def show_user_profile(username):
+def profile(username):
    # show the user profile for that user
    return 'User %s' % username
 
@@ -29,4 +31,10 @@ def trailer():
 @app.route('/absolute')
 def absoluter():
     return 'An absolute route will return 404 if trailing slash is added to uri'
+
+with app.test_request_context():
+    print( url_for('index') )
+    print( url_for('login') )
+    print( url_for('login', next='/') )
+    print( url_for('profile', username='John Doe') )
 
