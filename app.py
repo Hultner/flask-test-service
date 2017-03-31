@@ -1,12 +1,16 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, request
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return 'Index Page'
 
-@app.route('/login')
-def login(): pass
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        return 'Logged in'
+    else:
+        return 'Log in by POSTing'
 
 @app.route('/user/<username>')
 def profile(username):
