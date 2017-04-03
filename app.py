@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, abort, make_response
+from flask import Flask, url_for, request, abort, make_response, redirect
 app = Flask(__name__)
 
 @app.route('/')
@@ -23,7 +23,8 @@ def login():
 
 @app.route('/restricted')
 def restricted():
-    return (redirect(url_for('login'))
+    return redirect(url_for('login'))
+
 
 def valid_login(username, password):
     # Placeholder login method
