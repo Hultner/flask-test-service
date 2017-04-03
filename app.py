@@ -1,5 +1,20 @@
-from flask import Flask, url_for, request, abort, make_response, redirect
+"""This is a testing application
+
+This application is mainly used for testing the current state of flask and it's
+capabilities.
+"""
+
+from flask import (Flask,
+        url_for,
+        request,
+        abort,
+        make_response,
+        redirect,
+        session)
+import config
+
 app = Flask(__name__)
+app.secret_key = config.session_secret
 
 @app.route('/')
 def index():
@@ -33,9 +48,9 @@ def valid_login(username, password):
 def log_the_user_in(username):
     # Placeholder login method
     resp = make_response('Successfully logged in as %s' % username)
-    resp.set_cookie('username', username)
+    session['username'] = username
+    resp.set_cookie('user', username)
     return resp
-
 
 @app.route('/user/<username>')
 def profile(username):
