@@ -21,6 +21,9 @@ def login():
     else:
         return 'Log in by POSTing'
 
+@app.route('/restricted')
+def restricted():
+    return (redirect(url_for('login'))
 
 def valid_login(username, password):
     # Placeholder login method
