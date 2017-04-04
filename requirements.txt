@@ -6,8 +6,8 @@ itsdangerous==0.24
 Jinja2==2.9.5
 MarkupSafe==1.0
 packaging==16.8
-pep8==1.7.0
 pipreqs==0.4.6
+pycodestyle==2.3.1
 pyparsing==2.2.0
 requests==2.13.0
 six==1.10.0
