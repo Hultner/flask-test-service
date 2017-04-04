@@ -7,4 +7,3 @@
 # can also be invoked from commandline by the following code
 # python3 -c "import os; print(os.urandom(24))"
 session_secret = 'CHANGE ME'
-
