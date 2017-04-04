@@ -85,6 +85,7 @@ def absoluter():
     return 'An absolute route will return 404 if trailing slash is added ' + \
            ' to uri'
 
+
 with app.test_request_context():
     print(url_for('index'))
     print(url_for('login'))
