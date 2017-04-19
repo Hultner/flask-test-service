@@ -13,8 +13,8 @@ from flask import (Flask,
                    session)
 import config
 
-app = Flask(__name__)
-app.secret_key = config.session_secret
+app = Flask(__name__)  # pylint: disable=invalid-name
+app.secret_key = config.SESSION_SECRET
 
 
 @app.route('/')
@@ -30,12 +30,12 @@ def login():
                 param in request.json for param in ('password', 'username')):
             abort(400)
 
-        if valid_login(request.json['username'],
-                       request.json['password']):
-            return log_the_user_in(request.json['username'])
-        else:
-            error = 'Invalid username or password'
-            return error, 401
+        if _valid_login(request.json['username'],
+                        request.json['password']):
+            return _log_the_user_in(request.json['username'])
+
+        error = 'Invalid username or password'
+        return error, 401
     else:
         return 'Log in by POSTing'
 
@@ -45,12 +45,12 @@ def restricted():
     return redirect(url_for('login'))
 
 
-def valid_login(username, password):
+def _valid_login(username, password):
     # Placeholder login method
-    return username == 'hultner'
+    return username == 'hultner' and password
 
 
-def log_the_user_in(username):
+def _log_the_user_in(username):
     # Placeholder login method
     resp = make_response('Successfully logged in as %s' % username)
     session['username'] = username
