@@ -4,7 +4,7 @@
 source ./flask-test-service/bin/activate
 
 # Flask entry point
-export FLASK_APP=app.py
+export FLASK_APP=test_service
 # Flask debug mode, live code reload and debugger activated
 export FLASK_DEBUG=1
 
