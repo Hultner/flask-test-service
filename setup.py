@@ -12,5 +12,7 @@ setup(
     install_requires=[
         'flask',
         'requests',
+        'sqlalchemy',
+        'psycopg',
     ],
 )
