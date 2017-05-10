@@ -10,5 +10,5 @@ virtualenv -p python3 flask-test-service
 
 # Activate environment and install requirements
 source activate.sh
-pip install -r requirements.txt
+pip install -e . 
 
