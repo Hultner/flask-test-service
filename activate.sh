@@ -1,1 +1,3 @@
-source ./flask-test-service/bin/activate
+#!/usr/bin/env sh
+. flask-test-service/bin/activate
+
