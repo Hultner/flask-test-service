@@ -5,3 +5,4 @@
 *.egg-info/*
 flask-test-service
 config.py
+*.idea
