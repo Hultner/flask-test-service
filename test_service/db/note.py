@@ -4,6 +4,7 @@ I use this script as a place to hack around with SQL Alchemy, should not be
 seen as a part of the project.
 """
 import sqlalchemy
+import json
 from test_service import config
 
 print(config.DB_USER)
@@ -31,6 +32,31 @@ def connect(user, password, database, schema, host='localhost', port=5432):
 connection, metadata = connect(config.DB_USER, config.DB_PASSWORD,
                                config.DB_DATABASE, 'flask_test',
                                config.DB_HOST, config.DB_PORT)
-
+connection.echo = True
 for table in metadata.tables:
     print(table)
+
+table = metadata.tables['{}.note'.format(config.DB_SCHEMA)]
+data = connection.execute(table.select())
+
+# for note in data:
+#     print(note)
+
+class Note:
+    def as_dict(self):
+        return { column.name: getattr(self, column.name) for column in self.__table__.columns }
+
+def jsonPrint(table_proxy):
+    print(json.dumps([(dict(row.items())) for row in table_proxy]))
+
+jsonPrint(data.fetchall())
+print("Test----")
+#print(data.fetchone().items())
+
+
+"""
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
+    body = db.Column(db.Text)
+"""
