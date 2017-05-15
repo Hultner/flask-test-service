@@ -6,3 +6,6 @@
 flask-test-service
 config.py
 *.idea
+test_service.egg-info/
+test_service/__pycache__/
+db.conf
