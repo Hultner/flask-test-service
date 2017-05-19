@@ -46,7 +46,13 @@ class Note:
     def as_dict(self):
         return { column.name: getattr(self, column.name) for column in self.__table__.columns }
 
-def jsonPrint(table_proxy):
+
+def json_print(table_proxy):
+    """Prints a ResultProxy array as a json object
+    
+    Args: 
+        table_proxy: ResultProxy of rows from a database query
+    """
     print(json.dumps([(dict(row.items())) for row in table_proxy]))
 
 jsonPrint(data.fetchall())
