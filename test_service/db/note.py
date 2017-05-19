@@ -42,9 +42,17 @@ data = connection.execute(table.select())
 # for note in data:
 #     print(note)
 
+
 class Note:
+    """Model for notes"""
     def as_dict(self):
-        return { column.name: getattr(self, column.name) for column in self.__table__.columns }
+        """ Return dict representation of model """
+        return {column.name: getattr(self, column.name)
+                for column in self.__table__.columns}
+
+    def as_json(self):
+        """ Return json representation of model """
+        return json.dumps(self.as_dict())
 
 
 def json_print(table_proxy):
