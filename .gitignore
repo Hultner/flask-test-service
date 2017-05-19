@@ -1,7 +1,8 @@
 *.swp
 *.swo
+*.swn
 *~
-*/__pycache__/*
+__pycache__/
 *.egg-info/*
 flask-test-service
 config.py
