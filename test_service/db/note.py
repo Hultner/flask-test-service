@@ -63,9 +63,10 @@ def json_print(table_proxy):
     """
     print(json.dumps([(dict(row.items())) for row in table_proxy]))
 
-jsonPrint(data.fetchall())
+
+json_print(data.fetchall())
 print("Test----")
-#print(data.fetchone().items())
+# print(data.fetchone().items())
 
 
 """
