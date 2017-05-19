@@ -3,8 +3,8 @@
 I use this script as a place to hack around with SQL Alchemy, should not be
 seen as a part of the project.
 """
-import sqlalchemy
 import json
+import sqlalchemy
 from test_service import config
 
 print(config.DB_USER)
