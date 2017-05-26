@@ -6,7 +6,10 @@ seen as a part of the project.
 from test_service.util.jsontools import json_dump, json, ExtendedEncoder
 from datetime import datetime
 from functools import reduce
+from sqlalchemy import *
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import DeclarativeMeta
 from test_service import config
 
 
@@ -19,6 +22,13 @@ print(config.DB_HOST)
 print(config.DB_PORT)
 
 
+
+
+print(json.dumps(datetime.now(), cls=ExtendedEncoder))
+json_dump(datetime.now())
+
+
+
 def connect(user, password, database, schema, host='localhost', port=5432):
     """Returns a connection and a metadata object"""
     # We connect with the help of the PostgreSQL URL
@@ -27,23 +37,27 @@ def connect(user, password, database, schema, host='localhost', port=5432):
     url = url.format(user, password, host, port, database)
 
     # The return value of create_engine() is our connection object
-    con = sqlalchemy.create_engine(url, client_encoding='utf8')
+    con = create_engine(url, client_encoding='utf8')
 
     # We then bind the connection to MetaData()
-    meta = sqlalchemy.MetaData(bind=con, schema=schema, reflect=True)
+    meta = MetaData(bind=con, schema=schema, reflect=True)
 
     return con, meta
 
 
-connection, metadata = connect(config.DB_USER, config.DB_PASSWORD,
+connection, meta = connect(config.DB_USER, config.DB_PASSWORD,
                                config.DB_DATABASE, 'flask_test',
                                config.DB_HOST, config.DB_PORT)
+
 connection.echo = True
-for table in metadata.tables:
+Session = sessionmaker(bind=connection)
+for table in meta.tables:
     print(table)
 
-table = metadata.tables['{}.note'.format(config.DB_SCHEMA)]
-data = connection.execute(table.select())
+#table = metadata.tables['{}.note'.format(config.DB_SCHEMA)]
+#data = connection.execute(table.select())
+
+#notes = Table('note', metadata, autoload=True, autoload_with=connection, schema=config.DB_SCHEMA)
 
 # for note in data:
 #     print(note)
@@ -76,18 +90,34 @@ class Note(Base):
 
 def json_print(table_proxy):
     """Prints a ResultProxy array as a json object
-    
-    Args: 
+
+    Args:
         table_proxy: ResultProxy of rows from a database query
     """
     print(json.dumps([(dict(row.items())) for row in table_proxy]))
 
+session = Session()
 
-json_print(data.fetchall())
+#json_print(data.fetchall())
 print("Test----")
+#print(notes)
+#json_print(notes.select().execute())
 # print(data.fetchone().items())
+note_test = session.query(Note).all()
+#Note()
+print(note_test)
+#json_print(note_test)
+for note in note_test:
+    print(note)
+    print(note.as_dict())
+    print(note.json)
 
+#note_1 = session.query(Note).filter(Note.id == 1).one()
+#print("Fetched note by id")
+#print(note_1.json)
 
+print("Full json")
+print(json_dump(note_test))
 """
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
