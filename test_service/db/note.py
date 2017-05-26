@@ -3,9 +3,15 @@
 I use this script as a place to hack around with SQL Alchemy, should not be
 seen as a part of the project.
 """
-import json
-import sqlalchemy
+from test_service.util.jsontools import json_dump, json, ExtendedEncoder
+from datetime import datetime
+from functools import reduce
+from sqlalchemy.ext.declarative import declarative_base
 from test_service import config
+
+
+
+Base = declarative_base()
 
 print(config.DB_USER)
 print(config.DB_PASSWORD)
@@ -43,16 +49,29 @@ data = connection.execute(table.select())
 #     print(note)
 
 
-class Note:
+class Note(Base):
+    #__table__ = Table('note', meta, autoload=True, autoload_with=connection, schema=config.DB_SCHEMA)
+    __table__ = Table('note', meta, autoload=True, schema=config.DB_SCHEMA)
+    #__tablename__ = "note"
+
     """Model for notes"""
     def as_dict(self):
         """ Return dict representation of model """
         return {column.name: getattr(self, column.name)
                 for column in self.__table__.columns}
 
-    def as_json(self):
+    @property
+    def json(self):
         """ Return json representation of model """
-        return json.dumps(self.as_dict())
+        return json.dumps(self.as_dict(), cls=ExtendedEncoder)
+
+    def __repr__(self):
+        param_string = reduce(
+            (lambda prev, col: "{} {}='{}',".format(prev, col.name, getattr(self, col.name))),
+            self.__table__.columns, ""
+        ).strip(", ")
+        return "<{}({})>".format(self.__class__.__name__, param_string)
+
 
 
 def json_print(table_proxy):
