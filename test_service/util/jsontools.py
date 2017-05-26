@@ -6,10 +6,11 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 
 
 class ExtendedEncoder(json.JSONEncoder):
-    """Extended JSONEncoder with support for datetime and SQLAlchemy objects."""
-    def default(self, o): # pylint: disable=E0202
-        # o is used to support kwargs as default JSONEncoder uses o, E0202 is a false positive
-        # https://github.com/PyCQA/pylint/issues/414
+    """Extended JSONEncoder with support for datetime and SQLAlchemy objects.
+    """
+    def default(self, o):  # pylint: disable=E0202
+        # o is used to support kwargs as default JSONEncoder uses o
+        # E0202 is a false positive https://github.com/PyCQA/pylint/issues/414
         if isinstance(o.__class__, DeclarativeMeta):
             # an SQLAlchemy class
             # return a json-encodable dict
