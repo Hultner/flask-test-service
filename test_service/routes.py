@@ -1,4 +1,6 @@
-"""routes
+"""URI Routes of the flask application
+
+Author: Alexander Hultnér, 2017
 
 Provides the standard routes to the Flask application
 """
@@ -9,7 +11,11 @@ from flask import (url_for,
                    redirect,
                    session)
 from test_service import app
+from test_service.db import note
 
+
+def ensure_params(given, required):
+    return given and all(param in request.json for param in required)
 
 @app.route('/')
 def index():
@@ -22,8 +28,7 @@ def login():
     """Method responsible for handling user login api"""
     error = None
     if request.method == 'POST':
-        if not request.json or not all(
-                param in request.json for param in ('password', 'username')):
+        if not ensure_params(request.json, ('password', 'username')):
             abort(400)
 
         if _valid_login(request.json['username'],
@@ -84,3 +89,38 @@ def absoluter():
     """Testing URI with absolute path (not trailing slash"""
     return 'An absolute route will return 404 if trailing slash is added ' + \
            ' to uri'
+
+
+@app.route('/note/<int:note_id>', methods=['PUT'])
+def update_note(note_id):
+    pass
+
+
+@app.route('/note/<int:note_id>', methods=['DELETE'])
+def remove_note(note_id):
+    pass
+
+
+@app.route('/note/', methods=['POST'])
+def add_note():
+    """Add a new note"""
+    if ensure_params(request.json, ('title', 'body')):
+        return note.add_note(request.json['title'], request.json['body'])
+    else:
+        error = 'Required arguments missing'
+        return error, 400
+
+
+@app.route('/note')
+def show_notes():
+    """Return all notes"""
+    return 'all notes'
+
+
+@app.route('/note/<int:note_id>')
+def show_note(note_id):
+    """Show the note with the given id, the id is an integer"""
+    return 'note %d' % note_id
+
+
+

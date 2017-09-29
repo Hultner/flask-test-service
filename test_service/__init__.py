@@ -1,5 +1,7 @@
 """This is a testing application
 
+Author: Alexander Hultnér, 2017
+
 This application is mainly used for testing the current state of flask and it's
 capabilities.
 """

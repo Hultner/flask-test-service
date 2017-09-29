@@ -1,5 +1,9 @@
 """Collection of tools making JSON-handling easier.
+
+Author: Alexander Hultnér, 2017
+
 """
+
 import json
 from datetime import datetime
 from sqlalchemy.ext.declarative import DeclarativeMeta

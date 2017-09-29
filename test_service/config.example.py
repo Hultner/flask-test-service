@@ -1,5 +1,7 @@
 """Configurable parameters for the application
 
+Author: Alexander Hultnér, 2017
+
 This module store configurable python parameters set by the end user.
 Rename rename your configuration file to config.py and do not push your changes
 upstream.

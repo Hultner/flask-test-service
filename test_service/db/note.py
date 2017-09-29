@@ -1,5 +1,7 @@
 """Experiment script for databases
 
+Author: Alexander Hultnér, 2017
+
 I use this script as a place to hack around with SQL Alchemy, should not be
 seen as a part of the project.
 """
@@ -74,14 +76,30 @@ def json_print(table_proxy):
     print(json.dumps([(dict(row.items())) for row in table_proxy]))
 
 
+def add_note(title, body):
+    session = _create_db_session()
+    new_note = Note(title="My first note", body="Lorem ipsum dolor sit amet.")
+    session.add(new_note)
+    session.commit()
+    return new_note.json
+
+
+def update_note(id, title, body):
+    session = _create_db_session()
+
+    pass
+
+
+def _create_db_session():
+    Session = sessionmaker(bind=connection)
+    return Session()
+
 def main():
     """Entry point"""
-    Session = sessionmaker(bind=connection)
+    session = _create_db_session()
 
     for table in meta.tables:
         print(table)
-
-    session = Session()
 
     # json_print(data.fetchall())
     print("Test----")
