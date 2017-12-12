@@ -26,19 +26,21 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Method responsible for handling user login api"""
-    error = None
-    if request.method == 'POST':
-        if not ensure_params(request.json, ('password', 'username')):
-            abort(400)
 
-        if _valid_login(request.json['username'],
-                        request.json['password']):
-            return _log_the_user_in(request.json['username'])
+    if not ensure_params(request.json, ('password', 'username')):
+        abort(400)
 
-        error = 'Invalid username or password'
-        return error, 401
-    else:
-        return 'Log in by POSTing'
+    if _valid_login(request.json['username'], request.json['password']):
+        return _log_the_user_in(request.json['username'])
+
+    error = 'Invalid username or password'
+    return error, 401
+
+
+@app.route('/login', methods=['GET'])
+def login():
+    """Method responsible for handling invalid get login"""
+    return 'Log in by POSTing'
 
 
 @app.route('/restricted')
