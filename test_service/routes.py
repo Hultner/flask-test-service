@@ -38,7 +38,7 @@ def login():
 
 
 @app.route('/login', methods=['GET'])
-def login():
+def login_invalid():
     """Method responsible for handling invalid get login"""
     return 'Log in by POSTing'
 
