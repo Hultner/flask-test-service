@@ -12,7 +12,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from test_service import config
 from test_service.util.jsontools import json_dump, json, ExtendedEncoder
 
-
 print(config.DB_USER)
 print(config.DB_PASSWORD)
 print(config.DB_HOST)
@@ -37,8 +36,8 @@ def connect(user, password, database, schema, host='localhost', port=5432):
 
 Base = declarative_base()
 connection, meta = connect(config.DB_USER, config.DB_PASSWORD,
-                           config.DB_DATABASE, 'flask_test',
-                           config.DB_HOST, config.DB_PORT)
+                           config.DB_DATABASE, 'flask_test', config.DB_HOST,
+                           config.DB_PORT)
 connection.echo = True
 
 
@@ -50,8 +49,10 @@ class Note(Base):
 
     def as_dict(self):
         """ Return dict representation of model """
-        return {column.name: getattr(self, column.name)
-                for column in self.__table__.columns}  # pylint: disable=E1133
+        return {
+            column.name: getattr(self, column.name)
+            for column in self.__table__.columns
+        }  # pylint: disable=E1133
 
     @property
     def json(self):
@@ -62,8 +63,7 @@ class Note(Base):
         param_string = reduce(
             (lambda prev, col: "{} {}='{}',"
              .format(prev, col.name, getattr(self, col.name))),
-            self.__table__.columns, ""
-        ).strip(", ")
+            self.__table__.columns, "").strip(", ")
         return "<{}({})>".format(self.__class__.__name__, param_string)
 
 
@@ -84,15 +84,17 @@ def add_note(title, body):
     return new_note.json
 
 
-def update_note(id, title, body):
+def update_note(id_, title, body):
     session = _create_db_session()
-
-    pass
+    # Expand with actual update
+    session.commit()
+    return json.dumps(dict(message="Not implemented"))
 
 
 def _create_db_session():
     Session = sessionmaker(bind=connection)
     return Session()
+
 
 def main():
     """Entry point"""
